@@ -6,6 +6,7 @@ import android.os.Handler;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -179,7 +180,7 @@ public class AudioPlayer implements MethodCallHandler, Player.EventListener, Aud
     @Override
     public void onPositionDiscontinuity(int reason) {
         switch (reason) {
-        case Player.DISCONTINUITY_REASON_PERIOD_TRANSITION:
+        case Player.DISCONTINUITY_REASON_AUTO_TRANSITION:
         case Player.DISCONTINUITY_REASON_SEEK:
             onItemMayHaveChanged();
             break;
@@ -245,24 +246,24 @@ public class AudioPlayer implements MethodCallHandler, Player.EventListener, Aud
     }
 
     @Override
-    public void onPlayerError(ExoPlaybackException error) {
-        switch (error.type) {
-        case ExoPlaybackException.TYPE_SOURCE:
-            Log.e(TAG, "TYPE_SOURCE: " + error.getSourceException().getMessage());
-            break;
-
-        case ExoPlaybackException.TYPE_RENDERER:
-            Log.e(TAG, "TYPE_RENDERER: " + error.getRendererException().getMessage());
-            break;
-
-        case ExoPlaybackException.TYPE_UNEXPECTED:
-            Log.e(TAG, "TYPE_UNEXPECTED: " + error.getUnexpectedException().getMessage());
-            break;
-
-        default:
-            Log.e(TAG, "default: " + error.getUnexpectedException().getMessage());
-        }
-        sendError(String.valueOf(error.type), error.getMessage());
+    public void onPlayerError(PlaybackException error) {
+//        switch (error.type) {
+//        case ExoPlaybackException.TYPE_SOURCE:
+//            Log.e(TAG, "TYPE_SOURCE: " + error.getSourceException().getMessage());
+//            break;
+//
+//        case ExoPlaybackException.TYPE_RENDERER:
+//            Log.e(TAG, "TYPE_RENDERER: " + error.getRendererException().getMessage());
+//            break;
+//
+//        case ExoPlaybackException.TYPE_UNEXPECTED:
+//            Log.e(TAG, "TYPE_UNEXPECTED: " + error.getUnexpectedException().getMessage());
+//            break;
+//
+//        default:
+//            Log.e(TAG, "default: " + error.getUnexpectedException().getMessage());
+//        }
+//        sendError(String.valueOf(error.type), error.getMessage());
         errorCount++;
         if (player.hasNext() && currentIndex != null && errorCount <= 5) {
             int nextIndex = currentIndex + 1;
